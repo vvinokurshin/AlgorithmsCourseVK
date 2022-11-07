@@ -53,7 +53,7 @@ template <class T> T CArray<T>::GetAt(size_t index) const {
 }
 
 template <class T> T &CArray<T>::operator[](size_t index) {
-    assert(index >= 0 && index < realSize && buffer != 0);
+    assert(index < realSize && buffer != 0);
     return buffer[index];
 }
 
@@ -169,7 +169,7 @@ class UserComparator {
 };
 
 void topKUsers(std::istream &input, std::ostream &output) {
-    int n, k;
+    size_t n, k;
     MinHeap<User, UserComparator> heap;
     User cur_user;
 

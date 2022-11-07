@@ -16,13 +16,13 @@ class CArray {
 
     int Size() const { return realSize; }
 
-    int GetAt(int index) const;
-    int operator[](int index) const { return GetAt(index); }
-    int &operator[](int index);
+    int GetAt(size_t index) const;
+    int operator[](size_t index) const { return GetAt(index); }
+    int &operator[](size_t index);
     CArray &operator=(const CArray arr);
 
     void Add(int element);
-    void Remove(int index);
+    void Remove(size_t index);
 
  private:
     const size_t DefaultInitialSize = 10;
@@ -36,23 +36,29 @@ class CArray {
 CArray::CArray(const CArray &arr) {
     bufferSize = arr.bufferSize;
     realSize = arr.realSize;
-    std::copy(arr.buffer, arr.buffer + arr.realSize, buffer);
+
+    for (size_t i = 0; i < realSize; ++i)
+        (*this).Add(arr[i]);
 }
 
-int CArray::GetAt(int index) const {
-    assert(index >= 0 && index < realSize && buffer != 0);
+int CArray::GetAt(size_t index) const {
+    assert(index < realSize && buffer != 0);
     return buffer[index];
 }
 
-int &CArray::operator[](int index) {
-    assert(index >= 0 && index < realSize && buffer != 0);
+int &CArray::operator[](size_t index) {
+    assert(index < realSize && buffer != 0);
     return buffer[index];
 }
 
 CArray &CArray::operator=(const CArray arr) {
-    bufferSize = arr.bufferSize;
-    realSize = arr.realSize;
-    std::copy(arr.buffer, arr.buffer + arr.realSize, buffer);
+    if (this != &arr) {
+        bufferSize = arr.bufferSize;
+        realSize = arr.realSize;
+
+        for (size_t i = 0; i < realSize; ++i)
+            (*this).Add(arr[i]);
+    }
 
     return *this;
 }
@@ -76,8 +82,8 @@ void CArray::Add(int element) {
     buffer[realSize++] = element;
 }
 
-void CArray::Remove(int index) {
-    assert(realSize > 0 && buffer != 0 && index >= 0 && index < realSize);
+void CArray::Remove(size_t index) {
+    assert(realSize > 0 && buffer != 0 && index < realSize);
 
     if (index < realSize - 1)
         std::copy(buffer + index + 1, buffer + realSize, buffer + index);
@@ -97,7 +103,7 @@ class Stack {
 
  private:
     CArray arr;
-    size_t top;
+    ssize_t top;
 };
 
 void Stack::push(int a) {
@@ -161,11 +167,11 @@ bool handler(Queue &q, int mode, int elem) {
 }
 
 void task(std::istream &input, std::ostream &output) {
-    int len;
+    size_t len;
     input >> len;
     Queue q;
 
-    for (int i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i) {
         int mode, elem;
         input >> mode >> elem;
 

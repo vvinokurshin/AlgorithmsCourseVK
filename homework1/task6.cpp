@@ -15,7 +15,7 @@ int partition(T *arr, size_t l, size_t r, Comparator cmp = Comparator()) {
 
     std::swap(arr[pivot_idx], arr[l]);
 
-    int i = r - 1, j = r - 1;
+    size_t i = r - 1, j = r - 1;
 
     while (i != l) {
         if (cmp(arr[i], pivot))

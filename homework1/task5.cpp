@@ -3,7 +3,6 @@
 концов каждого отрезка (Li и Ri). Найти длину окрашенной части числовой прямой.
 */
 
-#include <cassert>
 #include <iostream>
 
 template <class T, typename Comparator = std::less<T>>
@@ -56,7 +55,7 @@ class SegmentComparator {
 };
 
 void inputArr(Point *arr, size_t len, std::istream &input) {
-    for (int i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i) {
         input >> arr[i].position;
 
         if (i % 2 == 0)
@@ -69,7 +68,7 @@ void inputArr(Point *arr, size_t len, std::istream &input) {
 int length(Point *arr, size_t len) {
     size_t res = 0, start = 0, width = 0;
 
-    for (int i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i) {
         if (arr[i].type == in) {
             width++;
 
