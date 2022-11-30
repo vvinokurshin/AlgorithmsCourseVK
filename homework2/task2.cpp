@@ -15,7 +15,8 @@ K, то узел K добавляется в правое поддерево roo
 template <typename T, typename Comparator = std::less<T>>
 class AVLTree {
     struct Node {
-        Node(const T &data) : data(data), left(nullptr), right(nullptr) {}
+        explicit Node(const T &data)
+            : data(data), left(nullptr), right(nullptr) {}
 
         T data;
         Node *left;
@@ -29,7 +30,7 @@ class AVLTree {
     bool find(const T &value);
     void add(const T &value);
     void remove(const T &value);
-    void inOrder(std::ostream &output);
+    void inOrder(std::ostream &output) const;
 
  private:
     Node *root;
@@ -39,8 +40,7 @@ class AVLTree {
 };
 
 template <typename T, typename Comparator>
-AVLTree<T, Comparator>::AVLTree()
-    : root(nullptr), cmp(Comparator()) {}
+AVLTree<T, Comparator>::AVLTree() : root(nullptr), cmp(Comparator()) {}
 
 template <typename T, typename Comparator>
 AVLTree<T, Comparator>::~AVLTree() {
@@ -182,7 +182,7 @@ AVLTree<T, Comparator>::deleteNode(Node *node) {
 }
 
 template <typename T, typename Comparator>
-void AVLTree<T, Comparator>::inOrder(std::ostream &output) {
+void AVLTree<T, Comparator>::inOrder(std::ostream &output) const {
     std::stack<Node *> s;
 
     Node *cur = root;

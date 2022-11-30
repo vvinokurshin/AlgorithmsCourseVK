@@ -22,7 +22,7 @@ struct HashTableNode {
     T data;
 
     HashTableNode() : state(NIL) {}
-    HashTableNode(T data) : data(data), state(DEFAULT) {}
+    explicit HashTableNode(const T &data) : state(DEFAULT), data(data) {}
 };
 
 class StringHasher1 {
@@ -75,7 +75,7 @@ class HashTable {
 
  private:
     void grow();
-    size_t doubleHash(const T &key, size_t idx, size_t tableSize);
+    size_t doubleHash(const T &key, size_t ind, size_t tableSize);
 
     std::vector<HashTableNode<T>> table;
     size_t size;
@@ -85,7 +85,7 @@ class HashTable {
 
 template <typename T, typename Hasher1, typename Hasher2>
 HashTable<T, Hasher1, Hasher2>::HashTable(const HashTable &other)
-    : size(other.size), table(other.table) {}
+    : table(other.table), size(other.size) {}
 
 template <typename T, typename Hasher1, typename Hasher2>
 bool HashTable<T, Hasher1, Hasher2>::find(const T &key) {

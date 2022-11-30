@@ -14,7 +14,9 @@
 template <typename T, typename Comparator = std::less<T>>
 class AVLTree {
     struct Node {
-        Node(const T &data) : data(data), left(nullptr), right(nullptr), height(1), numNodes(1) {}
+        explicit Node(const T &data)
+            : data(data), left(nullptr), right(nullptr), height(1),
+              numNodes(1) {}
 
         T data;
         Node *left;
@@ -29,20 +31,19 @@ class AVLTree {
 
     void add(const T &value);
     void remove(const T &value);
-    void inOrder(std::ostream &output);
     T kth_stat(const size_t &k);
 
  private:
     Node *root;
     Comparator cmp;
 
-    size_t height(const Node* node) const;
+    size_t height(const Node *node) const;
     int balanceFactor(const Node *node) const;
-    void fixHeight(Node* node);
+    void fixHeight(Node *node);
     void fixNumNodes(Node *node);
 
-    Node *leftRotate(Node* node);
-    Node *rightRotate(Node* node);
+    Node *leftRotate(Node *node);
+    Node *rightRotate(Node *node);
     Node *balance(Node *node);
 
     Node *add(Node *node, const T &value);
@@ -53,8 +54,7 @@ class AVLTree {
 };
 
 template <typename T, typename Comparator>
-AVLTree<T, Comparator>::AVLTree()
-    : root(nullptr), cmp(Comparator()) {}
+AVLTree<T, Comparator>::AVLTree() : root(nullptr), cmp(Comparator()) {}
 
 template <typename T, typename Comparator>
 AVLTree<T, Comparator>::~AVLTree() {
@@ -82,7 +82,7 @@ AVLTree<T, Comparator>::~AVLTree() {
 }
 
 template <class T, class Comparator>
-size_t AVLTree<T, Comparator>::height(const Node* node) const {
+size_t AVLTree<T, Comparator>::height(const Node *node) const {
     if (node) {
         return node->height;
     }
@@ -91,17 +91,17 @@ size_t AVLTree<T, Comparator>::height(const Node* node) const {
 }
 
 template <class T, class Comparator>
-int AVLTree<T, Comparator>::balanceFactor(const Node* node) const {
+int AVLTree<T, Comparator>::balanceFactor(const Node *node) const {
     return height(node->right) - height(node->left);
 }
 
 template <class T, class Comparator>
-void AVLTree<T, Comparator>::fixHeight(Node* node) {
+void AVLTree<T, Comparator>::fixHeight(Node *node) {
     node->height = std::max(height(node->left), height(node->right)) + 1;
 }
 
 template <class T, class Comparator>
-void AVLTree<T, Comparator>::fixNumNodes(Node* node) {
+void AVLTree<T, Comparator>::fixNumNodes(Node *node) {
     node->numNodes = 1;
 
     if (node->left) {
@@ -114,7 +114,8 @@ void AVLTree<T, Comparator>::fixNumNodes(Node* node) {
 }
 
 template <typename T, typename Comparator>
-typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::leftRotate(Node *node) {
+typename AVLTree<T, Comparator>::Node *
+AVLTree<T, Comparator>::leftRotate(Node *node) {
     Node *right(node->right);
     node->right = right->left;
     right->left = node;
@@ -123,12 +124,13 @@ typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::leftRotate(Node *
     fixNumNodes(node);
     fixHeight(right);
     fixNumNodes(right);
-    
+
     return right;
 }
 
 template <typename T, typename Comparator>
-typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::rightRotate(Node *node) {
+typename AVLTree<T, Comparator>::Node *
+AVLTree<T, Comparator>::rightRotate(Node *node) {
     Node *left(node->left);
     node->left = left->right;
     left->right = node;
@@ -137,12 +139,13 @@ typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::rightRotate(Node 
     fixNumNodes(node);
     fixHeight(left);
     fixNumNodes(left);
-    
+
     return left;
 }
 
 template <typename T, typename Comparator>
-typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::balance(Node *node) {
+typename AVLTree<T, Comparator>::Node *
+AVLTree<T, Comparator>::balance(Node *node) {
     fixHeight(node);
     fixNumNodes(node);
 
@@ -154,7 +157,7 @@ typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::balance(Node *nod
         }
 
         return leftRotate(node);
-    } 
+    }
 
     if (bFactor == -2) {
         if (balanceFactor(node->left) > 0) {
@@ -167,14 +170,14 @@ typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::balance(Node *nod
     return node;
 }
 
-
 template <typename T, typename Comparator>
 void AVLTree<T, Comparator>::add(const T &value) {
     root = add(root, value);
 }
 
 template <typename T, typename Comparator>
-typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::add(Node *node, const T &value) {
+typename AVLTree<T, Comparator>::Node *
+AVLTree<T, Comparator>::add(Node *node, const T &value) {
     if (!node) {
         return new Node(value);
     }
@@ -194,7 +197,8 @@ void AVLTree<T, Comparator>::remove(const T &value) {
 }
 
 template <typename T, typename Comparator>
-typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::remove(Node *node, const T &value) {
+typename AVLTree<T, Comparator>::Node *
+AVLTree<T, Comparator>::remove(Node *node, const T &value) {
     if (!node) {
         return nullptr;
     }
@@ -225,7 +229,8 @@ typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::remove(Node *node
 }
 
 template <typename T, typename Comparator>
-typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::removeMin(Node *node, Node *&min) {
+typename AVLTree<T, Comparator>::Node *
+AVLTree<T, Comparator>::removeMin(Node *node, Node *&min) {
     if (!node->left) {
         min = node;
         return node->right;
@@ -236,36 +241,14 @@ typename AVLTree<T, Comparator>::Node *AVLTree<T, Comparator>::removeMin(Node *n
 }
 
 template <typename T, typename Comparator>
-void AVLTree<T, Comparator>::inOrder(std::ostream &output) {
-    std::stack<Node *> s;
-
-    Node *cur = root;
-
-    while (cur || !s.empty()) {
-        while (cur) {
-            s.push(cur);
-            cur = cur->left;
-        }
-
-        cur = s.top();
-        s.pop();
-
-        output << cur->data << " ";
-        cur = cur->right;
-    }
-
-    output << std::endl;
-}
-
-template <typename T, typename Comparator>
 T AVLTree<T, Comparator>::kth_stat(const size_t &k) {
     return kth_stat(root, k + 1);
 }
 
 template <typename T, typename Comparator>
 T AVLTree<T, Comparator>::kth_stat(Node *node, const size_t &k) {
-    size_t numLeft = node->left ? node->left->numNodes : 0; 
-    size_t numRight = node->right ? node->right->numNodes : 0; 
+    size_t numLeft = node->left ? node->left->numNodes : 0;
+    size_t numRight = node->right ? node->right->numNodes : 0;
     size_t curStat = node->numNodes - numRight;
 
     if (k < curStat) {
